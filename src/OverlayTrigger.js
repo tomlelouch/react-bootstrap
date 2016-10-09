@@ -251,7 +251,7 @@ class OverlayTrigger extends React.Component {
       onFocus,
       onMouseOut,
       onMouseOver,
-      ...props,
+      ...props
     } = this.props;
 
     delete props.delay;
@@ -298,7 +298,7 @@ class OverlayTrigger extends React.Component {
         childProps.onFocus, onFocus, this.handleDelayedShow
       );
       triggerProps.onBlur = createChainedFunction(
-        childProps.onBlur, onBlur, this.handleDelayedHide,
+        childProps.onBlur, onBlur, this.handleDelayedHide
       );
     }
 

@@ -44,22 +44,18 @@ class SubNav extends React.Component {
   }
 
   isActive({ props }, activeKey, activeHref) {
-    if (props.active) {
+    if (
+      props.active ||
+      activeKey != null && props.eventKey === activeKey ||
+      activeHref && props.href === activeHref
+    ) {
       return true;
     }
 
-    if (activeKey != null && props.eventKey === activeKey) {
+    if (ValidComponentChildren.some(props.children, (child) => (
+      this.isActive(child, activeKey, activeHref)
+    ))) {
       return true;
-    }
-
-    if (activeHref && props.href === activeHref) {
-      return true;
-    }
-
-    if (props.children) {
-      return ValidComponentChildren.some(props.children, child => (
-        this.isActive(child, activeKey, activeHref)
-      ));
     }
 
     return props.active;
@@ -75,7 +71,7 @@ class SubNav extends React.Component {
       className,
       style,
       children,
-      ...props,
+      ...props
     } = this.props;
 
     delete props.active; // Accessed via this.isActive().

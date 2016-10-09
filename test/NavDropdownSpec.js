@@ -86,6 +86,46 @@ describe('<NavDropdown>', () => {
     dropdownNode.className.should.not.match(/\bopen\b/);
   });
 
+  it('should handle child active state', () => {
+    const instance = ReactTestUtils.renderIntoDocument(
+      <NavDropdown id="test-id" title="title" activeKey="2">
+        <MenuItem eventKey="1">MenuItem 1 content</MenuItem>
+        <MenuItem eventKey="2">MenuItem 2 content</MenuItem>
+        <MenuItem eventKey="3">MenuItem 3 content</MenuItem>
+      </NavDropdown>
+    );
+
+    expect(ReactDOM.findDOMNode(instance).className).to.match(/active/);
+
+    const items = ReactTestUtils.scryRenderedComponentsWithType(
+      instance, MenuItem
+    );
+    expect(ReactDOM.findDOMNode(items[0]).className).to.not.match(/active/);
+    expect(ReactDOM.findDOMNode(items[1]).className).to.match(/active/);
+    expect(ReactDOM.findDOMNode(items[2]).className).to.not.match(/active/);
+  });
+
+  it('should handle nested child null active state', () => {
+    class Container extends React.Component {
+      render() {
+        return null;
+      }
+    }
+
+    const instance = ReactTestUtils.renderIntoDocument(
+      <NavDropdown id="test-id" title="title">
+        <Container>
+          <MenuItem>MenuItem 1 content</MenuItem>
+        </Container>
+      </NavDropdown>
+    );
+
+    const container = ReactTestUtils.findRenderedComponentWithType(
+      instance, Container,
+    );
+    expect(container.props.active).to.not.be.false;
+  });
+
   it('should derive bsClass from parent', () => {
     const instance = ReactTestUtils.renderIntoDocument(
       <NavDropdown title="title" id="test-id" bsClass="my-dropdown">
